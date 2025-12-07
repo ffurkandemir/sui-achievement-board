@@ -1574,6 +1574,10 @@ function App() {
                       setError('❌ Please connect your wallet first!');
                       return;
                     }
+                    if (!achievement) {
+                      setError('❌ You need an Achievement NFT to stake!');
+                      return;
+                    }
                     const amount = parseInt(stakeAmount);
                     if (amount < 10) {
                       setError('❌ Minimum stake amount is 10 points!');
@@ -1595,6 +1599,7 @@ function App() {
                         target: `${PACKAGE_ID}::governance::stake_points`,
                         arguments: [
                           tx.object(STAKING_POOL_ID),
+                          tx.object(achievement.id), // NFT reference
                           tx.pure.u64(parseInt(stakeAmount)),
                           tx.object(CLOCK_OBJECT),
                         ],
@@ -1986,6 +1991,10 @@ function App() {
                               setError('❌ Please connect your wallet first!');
                               return;
                             }
+                            if (!achievement) {
+                              setError('❌ You need an Achievement NFT to vote!');
+                              return;
+                            }
                             if (effectivePoints < 10) {
                               setError(`❌ You need at least 10 points to vote! Current: ${effectivePoints}`);
                               return;
@@ -1999,9 +2008,9 @@ function App() {
                                 target: `${PACKAGE_ID}::governance::vote_on_proposal`,
                                 arguments: [
                                   tx.object(GOVERNANCE_HUB_ID),
+                                  tx.object(achievement.id), // NFT reference
                                   tx.pure.u64(proposal.id),
                                   tx.pure.bool(true), // vote for
-                                  tx.pure.u64(Math.min(effectivePoints, 10)), // voting_power (max 10)
                                   tx.object(CLOCK_OBJECT),
                                 ],
                               });
@@ -2063,6 +2072,10 @@ function App() {
                               setError('❌ Please connect your wallet first!');
                               return;
                             }
+                            if (!achievement) {
+                              setError('❌ You need an Achievement NFT to vote!');
+                              return;
+                            }
                             if (effectivePoints < 10) {
                               setError(`❌ You need at least 10 points to vote! Current: ${effectivePoints}`);
                               return;
@@ -2076,9 +2089,9 @@ function App() {
                                 target: `${PACKAGE_ID}::governance::vote_on_proposal`,
                                 arguments: [
                                   tx.object(GOVERNANCE_HUB_ID),
+                                  tx.object(achievement.id), // NFT reference
                                   tx.pure.u64(proposal.id),
                                   tx.pure.bool(false), // vote against
-                                  tx.pure.u64(Math.min(effectivePoints, 10)), // voting_power (max 10)
                                   tx.object(CLOCK_OBJECT),
                                 ],
                               });
@@ -2268,6 +2281,10 @@ function App() {
                       setError('❌ Please connect your wallet first!');
                       return;
                     }
+                    if (!achievement) {
+                      setError('❌ You need an Achievement NFT to list points!');
+                      return;
+                    }
                     const listAmount = parseInt(sellAmount);
                     const suiAmount = parseFloat(sellPrice);
                     
@@ -2300,6 +2317,7 @@ function App() {
                         target: `${PACKAGE_ID}::governance::list_points`,
                         arguments: [
                           tx.object(MARKETPLACE_ID),
+                          tx.object(achievement.id), // NFT reference
                           tx.pure.u64(parseInt(sellAmount)),
                           tx.pure.u64(mistAmount),
                         ],
@@ -2487,9 +2505,73 @@ function App() {
                           fontSize: 12,
                           cursor: 'pointer',
                         }}
-                        onClick={() => {
-                          console.log('🛒 Buy listing:', listing);
-                          setError('🚧 Buy functionality coming soon!');
+                        onClick={async () => {
+                          if (!account) {
+                            setError('❌ Please connect your wallet first!');
+                            return;
+                          }
+                          if (!achievement) {
+                            setError('❌ You need an Achievement NFT to buy points!');
+                            return;
+                          }
+                          console.group('🛒 Buying Points');
+                          console.log(`Listing ID: ${listing.id}`);
+                          console.log(`Points: ${listing.points_amount}`);
+                          console.log(`Price: ${(listing.sui_price / 1000000000).toFixed(6)} SUI`);
+                          try {
+                            const tx = new Transaction();
+                            const [coin] = tx.splitCoins(tx.gas, [tx.pure.u64(listing.sui_price)]);
+                            
+                            tx.moveCall({
+                              target: `${PACKAGE_ID}::governance::buy_points`,
+                              arguments: [
+                                tx.object(MARKETPLACE_ID),
+                                tx.object(achievement.id), // Buyer's NFT
+                                tx.pure.u64(listing.id),
+                                coin,
+                              ],
+                            });
+                            
+                            console.log('📤 Signing transaction...');
+                            const res = await signAndExecuteTransaction({ transaction: tx, chain: 'sui:testnet' });
+                            console.log('✅ Purchase successful:', res.digest);
+                            setTxDigest(res.digest);
+                            
+                            await client.waitForTransaction({ digest: res.digest });
+                            console.log('✅ Transaction confirmed!');
+                            console.groupEnd();
+                            
+                            // Refresh data
+                            refetchAchievement();
+                            loadLeaderboard();
+                            
+                            // Refresh marketplace
+                            const marketObj = await client.getObject({
+                              id: MARKETPLACE_ID,
+                              options: { showContent: true }
+                            });
+                            
+                            if (marketObj.data?.content && 'fields' in marketObj.data.content) {
+                              const mFields = marketObj.data.content.fields as any;
+                              const listingsContents = mFields.listings?.fields?.contents || [];
+                              
+                              const refreshedListings = listingsContents.map((entry: any) => {
+                                const lFields = entry.fields?.value?.fields || entry.fields || entry;
+                                return {
+                                  id: lFields.id || 'unknown',
+                                  seller: lFields.seller || 'Unknown',
+                                  points_amount: Number(lFields.points_amount || 0),
+                                  sui_price: Number(lFields.sui_price || 0),
+                                  active: lFields.active || false
+                                };
+                              });
+                              setMarketplaceListings(refreshedListings);
+                            }
+                          } catch (err) {
+                            console.error('❌ Purchase failed:', err);
+                            console.groupEnd();
+                            setError(`❌ Purchase error: ${String(err)}`);
+                          }
                         }}
                       >
                         Buy
