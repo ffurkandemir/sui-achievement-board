@@ -555,7 +555,7 @@ function App() {
   const progress =
     totalTasks > 0 ? Math.round((completedCount / totalTasks) * 100) : 0;
 
-  // Bugünün günü (timestamp'i güne çevir - smart contract ile aynı hesaplama)
+  // Today's day (convert timestamp to day - same calculation as smart contract)
   const getCurrentDay = () => {
     return Math.floor(Date.now() / 86400000); // milliseconds to days
   };
@@ -637,7 +637,7 @@ function App() {
       return;
     }
     if (!isOwner) {
-      setError('Read-only moddasın, bu board sana ait değil.');
+      setError('You are in read-only mode, this board does not belong to you.');
       return;
     }
     if (!achievement) {
@@ -690,7 +690,7 @@ function App() {
       return;
     }
     if (!isOwner) {
-      setError('Read-only moddasın, bu board sana ait değil.');
+      setError('You are in read-only mode, this board does not belong to you.');
       return;
     }
     if (!achievement) {
@@ -738,7 +738,7 @@ function App() {
       return;
     }
     if (!isOwner) {
-      setError('Read-only moddasın, bu board sana ait değil.');
+      setError('You are in read-only mode, this board does not belong to you.');
       return;
     }
     if (!achievement) {
@@ -830,7 +830,7 @@ function App() {
 
     if (!hasClipboard) {
       setError(
-        'Tarayıcın otomatik kopyalamayı desteklemiyor, aşağıdaki linki elle kopyalayabilirsin.',
+        'Your browser does not support auto-copy, you can copy the link manually below.',
       );
       return;
     }
@@ -842,7 +842,7 @@ function App() {
     } catch (e) {
       console.error(e);
       setError(
-        'Link panoya yazılamadı, aşağıdaki linki elle kopyalayabilirsin.',
+        'Could not write to clipboard, you can copy the link manually below.',
       );
     }
   }
@@ -852,15 +852,15 @@ function App() {
       return (
         <p>
           You can connect your wallet to create your own board or add to the URL{' '}
-          <code>?address=0x...</code> ekleyerek bir başkasının board&apos;unu
-          görüntüleyebilirsin.
+          <code>?address=0x...</code> to view someone else's board
+          .
         </p>
       );
     }
 
     return (
       <p>
-        Görüntülenen adres:{' '}
+        Viewing address:{' '}
         <span style={{ fontFamily: 'monospace', fontSize: 13 }}>
           {effectiveOwner}
         </span>
@@ -940,12 +940,12 @@ function App() {
                 cursor: 'pointer',
               }}
             >
-              Paylaşılabilir Link 🔗
+              Shareable Link 🔗
             </button>
           )}
           {copied && (
             <span style={{ fontSize: 11, color: '#22c55e' }}>
-              Link panoya kopyalandı!
+              Link copied to clipboard!
             </span>
           )}
         </div>
@@ -1235,16 +1235,16 @@ function App() {
               {effectivePoints}
               {reservedTotal > 0 && (
                 <span style={{ fontSize: 11, opacity: 0.7, marginLeft: 6 }}>
-                  (Toplam: {totalPoints}, Ayrılmış: {reservedTotal})
+                  (Total: {totalPoints}, Reserved: {reservedTotal})
                 </span>
               )}
             </div>
             <div>
-              <strong>Seviye: </strong>
+              <strong>Level: </strong>
               {achievement.level}
             </div>
             <div>
-              <strong>İlerleme: </strong>
+              <strong>Progress: </strong>
               {completedCount} / {totalTasks}
             </div>
             <div
@@ -1322,23 +1322,23 @@ function App() {
               <div style={{ display: 'flex', gap: 16, marginTop: 8 }}>
                 <div>
                   <div style={{ fontSize: 11, opacity: 0.7 }}>
-                    Mevcut Streak
+                    Current Streak
                   </div>
                   <div style={{ fontSize: 24, fontWeight: 700 }}>
-                    {achievement.daily_streak.current} gün
+                    {achievement.daily_streak.current} days
                   </div>
                 </div>
                 <div>
                   <div style={{ fontSize: 11, opacity: 0.7 }}>
-                    En Uzun Streak
+                    Longest Streak
                   </div>
                   <div style={{ fontSize: 24, fontWeight: 700 }}>
-                    {achievement.daily_streak.longest} gün
+                    {achievement.daily_streak.longest} days
                   </div>
                 </div>
                 <div>
                   <div style={{ fontSize: 11, opacity: 0.7 }}>
-                    Bugünkü Bonus
+                    Today's Bonus
                   </div>
                   <div style={{ fontSize: 24, fontWeight: 700, color: '#f59e0b' }}>
                     +{5 + achievement.daily_streak.current * 2} puan
@@ -1467,7 +1467,7 @@ function App() {
           {!eventsLoading && eventsError && (
             <p style={{ fontSize: 12, opacity: 0.8, color: '#f97373' }}>
               Error loading events (RPC or network issue). Tasks
-              yine de çalışıyor, sadece geçmiş liste şu an gösterilemiyor.
+              it still works, just the history list cannot be shown right now.
             </p>
           )}
 
@@ -1661,8 +1661,8 @@ function App() {
                 <div style={{ opacity: 0.8, lineHeight: 1.6 }}>
                   🗳️ Create new task proposals for the community<br/>
                   💰 Requirement: 10 points (proposal creation fee)<br/>
-                  ⏱️ Oylama süresi: 7 gün<br/>
-                  ✅ Kabul eşiği: %70 evet oyu
+                  ⏱️ Voting period: 7 days<br/>
+                  ✅ Approval threshold: 70% yes votes
                 </div>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -1988,7 +1988,7 @@ function App() {
                               return;
                             }
                             if (effectivePoints < 10) {
-                              setError(`❌ Oy vermek için en az 10 puana ihtiyacınız var! Mevcut: ${effectivePoints}`);
+                              setError(`❌ You need at least 10 points to vote! Current: ${effectivePoints}`);
                               return;
                             }
                             console.group('🗳️ Voting on Proposal');
@@ -2065,7 +2065,7 @@ function App() {
                               return;
                             }
                             if (effectivePoints < 10) {
-                              setError(`❌ Oy vermek için en az 10 puana ihtiyacınız var! Mevcut: ${effectivePoints}`);
+                              setError(`❌ You need at least 10 points to vote! Current: ${effectivePoints}`);
                               return;
                             }
                             console.group('🗳️ Voting on Proposal');
