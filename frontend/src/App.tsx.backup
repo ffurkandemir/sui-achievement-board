@@ -80,7 +80,7 @@ function useUserAchievementNft(ownerAddress: string | null) {
       select(data) {
         if (data.data.length === 0) return null;
         
-        // If multiple NFTs exist, select the newest one (by version number)
+        // Birden fazla NFT varsa en yeni olanı seç (version numarasına göre)
         const sortedObjs = [...data.data].sort((a, b) => {
           const versionA = typeof a.data?.version === 'string' 
             ? parseInt(a.data.version) 
@@ -88,10 +88,10 @@ function useUserAchievementNft(ownerAddress: string | null) {
           const versionB = typeof b.data?.version === 'string'
             ? parseInt(b.data.version)
             : (b.data?.version ?? 0);
-          return versionB - versionA; // Newest first (higher version)
+          return versionB - versionA; // En yeni önce (büyük version)
         });
         
-        // NFT selection - select newest version
+        // NFT selection - en yeni version'u seç
         
         const obj = sortedObjs[0];
         if (!obj || !obj.data || obj.data.content?.dataType !== 'moveObject') {
@@ -288,7 +288,7 @@ function App() {
   const [isResetting, setIsResetting] = useState(false);
   const [completingTaskIndex, setCompletingTaskIndex] = useState<number | null>(null);
 
-  // Tab state for new features
+  // Yeni özellikler için tab state
   const [activeTab, setActiveTab] = useState<'achievements' | 'governance' | 'tasks' | 'marketplace'>('achievements');
   
   // Governance states
@@ -335,7 +335,7 @@ function App() {
     data: leaderboard,
   } = useLeaderboard();
 
-  // Find user's points in leaderboard
+  // Kullanıcının leaderboard'daki puanlarını bul
   const leaderboardPoints = useMemo(() => {
     if (!effectiveOwner || !leaderboard) return null;
     const userEntry = leaderboard.find(
@@ -504,7 +504,7 @@ function App() {
     !!effectiveOwner &&
     account.address.toLowerCase() === effectiveOwner.toLowerCase();
 
-  // Reserved points sistemi - Read staked and listed points from localStorage
+  // Reserved points sistemi - localStorage'dan stake edilen ve listelenen puanları oku
   const getReservedPoints = useCallback(() => {
     if (!account?.address) return { staked: 0, listed: 0, voted: 0 };
     try {
@@ -530,7 +530,7 @@ function App() {
   // Reserved points'i memoize et - sadece account veya achievement değişince yeniden hesapla
   const reserved = useMemo(() => getReservedPoints(), [getReservedPoints]);
   
-  // Effective points: From leaderboard if available, otherwise from NFT, THEN subtract reserved
+  // Efektif puanlar: Leaderboard'da varsa oradan, yoksa NFT'den, SONRA reserve edilenleri düş
   const totalPoints = leaderboardPoints?.points ?? achievement?.points ?? 0;
   const reservedTotal = reserved.staked + reserved.listed + reserved.voted;
   const effectivePoints = Math.max(0, totalPoints - reservedTotal);
@@ -577,11 +577,11 @@ function App() {
 
   async function handleInitAchievement() {
     if (!account) {
-      setError('Please connect your wallet first.');
+      setError('Önce cüzdan bağla.');
       return;
     }
     if (!isOwner) {
-      setError('This board does not belong to you, only the owner can mint.');
+      setError('Bu board sana ait değil, sadece sahibi mint edebilir.');
       return;
     }
     setError(null);
@@ -633,7 +633,7 @@ function App() {
 
   async function handleCompleteTask(index: number) {
     if (!account) {
-      setError('Please connect your wallet first.');
+      setError('Önce cüzdan bağla.');
       return;
     }
     if (!isOwner) {
@@ -641,7 +641,7 @@ function App() {
       return;
     }
     if (!achievement) {
-      setError('Please mint an NFT first.');
+      setError('Önce NFT mint et.');
       return;
     }
     setError(null);
@@ -686,7 +686,7 @@ function App() {
 
   async function handleReset() {
     if (!account) {
-      setError('Please connect your wallet first.');
+      setError('Önce cüzdan bağla.');
       return;
     }
     if (!isOwner) {
@@ -694,7 +694,7 @@ function App() {
       return;
     }
     if (!achievement) {
-      setError('Please mint an NFT first.');
+      setError('Önce NFT mint et.');
       return;
     }
     setError(null);
@@ -734,7 +734,7 @@ function App() {
 
   async function handleClaimDailyReward() {
     if (!account) {
-      setError('Please connect your wallet first.');
+      setError('Önce cüzdan bağla.');
       return;
     }
     if (!isOwner) {
@@ -742,11 +742,11 @@ function App() {
       return;
     }
     if (!achievement) {
-      setError('Please mint an NFT first.');
+      setError('Önce NFT mint et.');
       return;
     }
     if (!canClaimToday) {
-      setError('You already claimed today reward! Try again tomorrow. 🕐');
+      setError('Bugün zaten ödülünü aldın! Yarın tekrar dene. 🕐');
       return;
     }
     setError(null);
@@ -799,7 +799,7 @@ function App() {
           const errStr = String(err);
           // Error code 4 = E_ALREADY_CLAIMED_TODAY
           if (errStr.includes('MoveAbort') && errStr.includes(', 4)')) {
-            setError('❌ You already claimed today reward! You can claim once every 24 hours.');
+            setError('❌ Bugün zaten ödülünü aldın! Her 24 saatte bir claim edebilirsin.');
           } else {
             setError(errStr);
           }
@@ -811,11 +811,11 @@ function App() {
 
   async function handleShare() {
     if (!effectiveOwner) {
-      setError('Please own or connect to a board first.');
+      setError('Önce bir board sahibi ol veya bağlan.');
       return;
     }
     if (typeof window === 'undefined') {
-      setError('Cannot create link in this environment.');
+      setError('Bu ortamda link oluşturulamıyor.');
       return;
     }
 
@@ -851,7 +851,7 @@ function App() {
     if (!effectiveOwner) {
       return (
         <p>
-          You can connect your wallet to create your own board or add to the URL{' '}
+          Cüzdan bağlayarak kendi board&apos;unu oluşturabilir veya URL&apos;ye{' '}
           <code>?address=0x...</code> ekleyerek bir başkasının board&apos;unu
           görüntüleyebilirsin.
         </p>
@@ -922,7 +922,7 @@ function App() {
         <div>
           <h1 className="responsive-title" style={{ fontSize: 28, margin: 0, background: 'linear-gradient(90deg, #60a5fa, #a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Sui Achievement Board 🏆</h1>
           <div style={{ fontSize: 13, opacity: 0.8 }}>
-            Complete tasks, earn points, level up.
+            Görevlerini tamamla, puan topla, level atla.
           </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -1003,8 +1003,8 @@ function App() {
               color: '#6ee7b7',
             }}
           >
-            This board is in read-only mode. Only the
-            board owner can complete tasks.
+            Bu board read-only modda görüntüleniyor. Görevleri sadece
+            board&apos;un sahibi tamamlayabilir.
           </div>
         )}
 
@@ -1097,11 +1097,11 @@ function App() {
         {effectiveOwner && account && !achievement && !achievementLoading && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: 16, background: '#1f2937', borderRadius: 12, border: '1px solid #374151' }}>
             <div style={{ fontSize: 14, color: '#fbbf24' }}>
-              ⚠️ <strong>New Contract Version</strong>
+              ⚠️ <strong>Yeni Kontrat Versiyonu</strong>
             </div>
             <div style={{ fontSize: 13, color: '#d1d5db', lineHeight: 1.5 }}>
-              Due to contract update, you need to mint a new Achievement NFT.
-              After minting, all features (Governance, Staking, Marketplace) will be available.
+              Kontrat güncellendiği için yeni bir Achievement NFT mint etmeniz gerekiyor.
+              Mint ettikten sonra tüm özellikler (Governance, Staking, Marketplace) kullanılabilir olacak.
             </div>
             {isOwner ? (
               <button
@@ -1122,17 +1122,17 @@ function App() {
                   transition: 'all 0.3s ease',
                 }}
               >
-                {isMinting ? '⏳ Minting...' : '🎯 Mint New NFT'}
+                {isMinting ? '⏳ Mint Ediliyor...' : '🎯 Yeni NFT Mint Et'}
               </button>
             ) : (
-              <p style={{ fontSize: 13, color: '#9ca3af' }}>No Achievement NFT at this address yet.</p>
+              <p style={{ fontSize: 13, color: '#9ca3af' }}>Bu adreste henüz Achievement NFT yok.</p>
             )}
           </div>
         )}
 
         {achievementLoading && (
           <p style={{ fontSize: 12, opacity: 0.8 }}>
-            Loading NFT data...
+            NFT bilgileri yükleniyor...
           </p>
         )}
 
@@ -1231,7 +1231,7 @@ function App() {
             </div>
 
             <div>
-              <strong>Points: </strong>
+              <strong>Puan: </strong>
               {effectivePoints}
               {reservedTotal > 0 && (
                 <span style={{ fontSize: 11, opacity: 0.7, marginLeft: 6 }}>
@@ -1287,10 +1287,10 @@ function App() {
               >
                 <div>
                   <div style={{ fontSize: 16, fontWeight: 600 }}>
-                    🔥 Daily Streak
+                    🔥 Günlük Streak
                   </div>
                   <div style={{ fontSize: 12, opacity: 0.7, marginTop: 2 }}>
-                    Log in daily and earn bonus points!
+                    Her gün giriş yap, bonus puan kazan!
                   </div>
                 </div>
                 {isOwner && (
@@ -1312,10 +1312,10 @@ function App() {
                     }}
                   >
                     {isClaimingDaily 
-                      ? '⏳ Sending...' 
+                      ? '⏳ Gönderiliyor...' 
                       : canClaimToday 
-                        ? '✨ Claim Daily Reward' 
-                        : '✅ Claimed Today'}
+                        ? '✨ Günlük Ödül Al' 
+                        : '✅ Bugün Alındı'}
                   </button>
                 )}
               </div>
@@ -1354,7 +1354,7 @@ function App() {
                   background: '#064e3b',
                   borderRadius: 6,
                 }}>
-                  ✅ You claimed today reward! Come back tomorrow.
+                  ✅ Bugünkü ödülünü aldın! Yarın tekrar gelebilirsin.
                 </div>
               )}
               {canClaimToday && isOwner && (
@@ -1366,7 +1366,7 @@ function App() {
                   background: '#451a03',
                   borderRadius: 6,
                 }}>
-                  ⏰ Your daily reward is ready Click to claim bonus points.
+                  ⏰ Günlük ödülün hazır! Tıkla ve bonus puanını al.
                 </div>
               )}
             </div>
@@ -1375,7 +1375,7 @@ function App() {
               {achievement.tasks_completed.map((done, idx) => {
                 const taskMeta =
                   TASKS[idx] ?? {
-                    title: `Task ${idx + 1}`,
+                    title: `Görev ${idx + 1}`,
                     description: '',
                   };
 
@@ -1420,7 +1420,7 @@ function App() {
                           marginTop: 4,
                         }}
                       >
-                        +10 points
+                        +10 puan
                       </div>
                     )}
                   </button>
@@ -1457,16 +1457,16 @@ function App() {
           }}
         >
           <h2 style={{ fontSize: 14, marginBottom: 8 }}>
-            Recent task activities
+            Son görev aktiviteleri
           </h2>
 
           {eventsLoading && (
-            <p style={{ fontSize: 12, opacity: 0.8 }}>Loading events...</p>
+            <p style={{ fontSize: 12, opacity: 0.8 }}>Eventler yükleniyor...</p>
           )}
 
           {!eventsLoading && eventsError && (
             <p style={{ fontSize: 12, opacity: 0.8, color: '#f97373' }}>
-              Error loading events (RPC or network issue). Tasks
+              Eventler alınırken bir hata oluştu (RPC veya ağ sorunu). Görevler
               yine de çalışıyor, sadece geçmiş liste şu an gösterilemiyor.
             </p>
           )}
@@ -1475,7 +1475,7 @@ function App() {
             !eventsError &&
             (!events || events.length === 0) && (
               <p style={{ fontSize: 12, opacity: 0.8 }}>
-                Henüz görev aktivitesi yok. Task butonlarına tıkladığında
+                Henüz görev aktivitesi yok. Görev butonlarına tıkladığında
                 burada görünecek.
               </p>
             )}
@@ -1503,13 +1503,13 @@ function App() {
                   <div>
                     {e.type === 'task' && (
                       <>
-                        🎯 Task {(e.taskIndex ?? 0) + 1} completed — {e.newPoints} puan
+                        🎯 Görev {(e.taskIndex ?? 0) + 1} tamamlandı — {e.newPoints} puan
                         {e.newLevel !== undefined && `, seviye ${e.newLevel}`}
                       </>
                     )}
                     {e.type === 'daily_reward' && (
                       <>
-                        🔥 Daily reward claimed — +{e.bonusPoints} puan (Streak: {e.streak} gün)
+                        🔥 Günlük ödül alındı — +{e.bonusPoints} puan (Streak: {e.streak} gün)
                       </>
                     )}
                   </div>
@@ -1536,20 +1536,20 @@ function App() {
               <h3 style={{ fontSize: 16, marginBottom: 12 }}>💎 Stake Points</h3>
               <div style={{ fontSize: 13, marginBottom: 12, padding: 10, background: '#020617', borderRadius: 6 }}>
                 <div style={{ marginBottom: 8 }}>
-                  <strong style={{ color: '#10b981' }}>📊 Your Current Points:</strong> <span style={{ fontSize: 16, fontWeight: 'bold', color: '#fbbf24' }}>{effectivePoints}</span>
+                  <strong style={{ color: '#10b981' }}>📊 Mevcut Puanınız:</strong> <span style={{ fontSize: 16, fontWeight: 'bold', color: '#fbbf24' }}>{effectivePoints}</span>
                 </div>
                 <div style={{ opacity: 0.8, lineHeight: 1.6 }}>
-                  💰 Earn 5% daily by staking<br/>
-                  ⚠️ Minimum stake amount: 10 points<br/>
-                  🔒 Staked points are virtually locked<br/>
+                  💰 Stake ederek günlük %5 kazanç elde edin<br/>
+                  ⚠️ Minimum stake miktarı: 10 puan<br/>
+                  🔒 Stake edilen puanlar virtual olarak kilitlenir<br/>
                   <span style={{ fontSize: 11, color: '#fbbf24', marginTop: 4, display: 'block' }}>
-                    ⚡ Note: Reserved points tracking is stored in your browser
+                    ⚡ Not: Reserved puan takibi tarayıcınızda saklanır
                   </span>
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 12, alignItems: 'flex-end', flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <label style={{ fontSize: 13, color: '#9ca3af', fontWeight: 500 }}>💰 Stake Amount (points)</label>
+                  <label style={{ fontSize: 13, color: '#9ca3af', fontWeight: 500 }}>💰 Stake Miktarı (puan)</label>
                   <input
                     type="number"
                     value={stakeAmount}
@@ -1572,16 +1572,16 @@ function App() {
                   onClick={async () => {
                     if (!account) {
                       console.log('%c❌ Access Denied', 'color: #ef4444; font-weight: bold;', 'Wallet not connected');
-                      setError('❌ Please connect your wallet first!');
+                      setError('❌ Lütfen önce cüzdanınızı bağlayın!');
                       return;
                     }
                     const amount = parseInt(stakeAmount);
                     if (amount < 10) {
-                      setError('❌ Minimum stake amount is 10 points!');
+                      setError('❌ Minimum stake miktarı 10 puandır!');
                       return;
                     }
                     if (effectivePoints < amount) {
-                      setError(`❌ Insufficient points! Current: ${effectivePoints}, Required: ${amount}`);
+                      setError(`❌ Yeterli puanınız yok! Mevcut: ${effectivePoints}, İstenen: ${amount}`);
                       console.log('%c❌ Insufficient Points', 'color: #ef4444; font-weight: bold;', `Have: ${effectivePoints}, Need: ${amount}`);
                       return;
                     }
@@ -1656,23 +1656,23 @@ function App() {
               <h3 style={{ fontSize: 18, marginBottom: 12, background: 'linear-gradient(90deg, #60a5fa, #a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: 700 }}>📝 Create Proposal</h3>
               <div style={{ fontSize: 13, marginBottom: 12, padding: 10, background: '#020617', borderRadius: 6 }}>
                 <div style={{ marginBottom: 8 }}>
-                  <strong style={{ color: '#10b981' }}>📊 Your Current Points:</strong> <span style={{ fontSize: 16, fontWeight: 'bold', color: '#fbbf24' }}>{effectivePoints}</span>
+                  <strong style={{ color: '#10b981' }}>📊 Mevcut Puanınız:</strong> <span style={{ fontSize: 16, fontWeight: 'bold', color: '#fbbf24' }}>{effectivePoints}</span>
                 </div>
                 <div style={{ opacity: 0.8, lineHeight: 1.6 }}>
-                  🗳️ Create new task proposals for the community<br/>
-                  💰 Requirement: 10 points (proposal creation fee)<br/>
+                  🗳️ Topluluk için yeni görev önerileri oluşturun<br/>
+                  💰 Gereksinim: 10 puan (proposal oluşturma ücreti)<br/>
                   ⏱️ Oylama süresi: 7 gün<br/>
                   ✅ Kabul eşiği: %70 evet oyu
                 </div>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <label style={{ fontSize: 13, color: '#9ca3af', fontWeight: 500 }}>📝 Title</label>
+                  <label style={{ fontSize: 13, color: '#9ca3af', fontWeight: 500 }}>📝 Başlık</label>
                   <input
                     type="text"
                     value={proposalTitle}
                     onChange={(e) => setProposalTitle(e.target.value)}
-                    placeholder="e.g.: New Daily Challenge Task"
+                    placeholder="Örn: Yeni Daily Challenge Görevi"
                     style={{
                       padding: '12px 16px',
                       borderRadius: 10,
@@ -1686,11 +1686,11 @@ function App() {
                   />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <label style={{ fontSize: 13, color: '#9ca3af', fontWeight: 500 }}>💬 Description</label>
+                  <label style={{ fontSize: 13, color: '#9ca3af', fontWeight: 500 }}>💬 Açıklama</label>
                   <textarea
                     value={proposalDescription}
                     onChange={(e) => setProposalDescription(e.target.value)}
-                    placeholder="Write detailed task description..."
+                    placeholder="Görevin detaylı açıklamasını yazın..."
                     rows={3}
                     style={{
                       padding: '12px 16px',
@@ -1744,16 +1744,16 @@ function App() {
                     onClick={async () => {
                       if (!account) {
                         console.log('%c❌ Access Denied', 'color: #ef4444; font-weight: bold;', 'Wallet not connected');
-                        setError('❌ Please connect your wallet first!');
+                        setError('❌ Lütfen önce cüzdanınızı bağlayın!');
                         return;
                       }
                       if (effectivePoints < 10) {
-                        setError(`❌ You need at least 10 points to create a proposal! Current: ${effectivePoints}`);
+                        setError(`❌ Proposal oluşturmak için en az 10 puana ihtiyacınız var! Mevcut: ${effectivePoints}`);
                         console.log('%c❌ Insufficient Points', 'color: #ef4444; font-weight: bold;', `Have: ${effectivePoints}, Need: 10`);
                         return;
                       }
                       if (!proposalTitle.trim() || !proposalDescription.trim()) {
-                        setError('❌ Title and description fields are required!');
+                        setError('❌ Başlık ve açıklama alanları zorunludur!');
                         return;
                       }
                       console.group('%c📝 Creating Proposal', 'font-size: 14px; font-weight: bold; color: #8b5cf6;');
@@ -1795,7 +1795,7 @@ function App() {
                         console.groupEnd();
                         const errStr = String(err);
                         if (errStr.includes('InsufficientPoints')) {
-                          setError('❌ At least 50 points required to create a proposal!');
+                          setError('❌ Proposal oluşturmak için en az 50 point gerekli!');
                         } else if (errStr.includes('MoveAbort')) {
                           const match = errStr.match(/MoveAbort.*?, (\d+)\)/);
                           const code = match ? match[1] : 'unknown';
@@ -1984,7 +1984,7 @@ function App() {
                           }}
                           onClick={async () => {
                             if (!account) {
-                              setError('❌ Please connect your wallet first!');
+                              setError('❌ Lütfen önce cüzdanınızı bağlayın!');
                               return;
                             }
                             if (effectivePoints < 10) {
@@ -2061,7 +2061,7 @@ function App() {
                           }}
                           onClick={async () => {
                             if (!account) {
-                              setError('❌ Please connect your wallet first!');
+                              setError('❌ Lütfen önce cüzdanınızı bağlayın!');
                               return;
                             }
                             if (effectivePoints < 10) {
@@ -2208,22 +2208,22 @@ function App() {
               <h3 style={{ fontSize: 16, marginBottom: 12 }}>💰 Sell Points</h3>
               <div style={{ fontSize: 13, marginBottom: 12, padding: 10, background: '#020617', borderRadius: 6 }}>
                 <div style={{ marginBottom: 8 }}>
-                  <strong style={{ color: '#10b981' }}>📊 Your Current Points:</strong> <span style={{ fontSize: 16, fontWeight: 'bold', color: '#fbbf24' }}>{effectivePoints}</span>
+                  <strong style={{ color: '#10b981' }}>📊 Mevcut Puanınız:</strong> <span style={{ fontSize: 16, fontWeight: 'bold', color: '#fbbf24' }}>{effectivePoints}</span>
                 </div>
                 <div style={{ opacity: 0.8, lineHeight: 1.6 }}>
-                  🏪 Sell your points for <strong style={{ color: '#60a5fa' }}>SUI tokens</strong><br/>
+                  🏪 Puanlarınızı <strong style={{ color: '#60a5fa' }}>SUI token</strong> karşılığında satın<br/>
                   💵 Platform komisyonu: %2.5<br/>
                   ⚡ Blockchain üzerinde anlık ödeme<br/>
                   🔒 Smart contract escrow sistemi<br/>
                   ⚠️ Minimum satış: 10 puan<br/>
                   <span style={{ fontSize: 11, color: '#fbbf24', marginTop: 4, display: 'block' }}>
-                    ⚡ Note: Listed points are tracked in your browser
+                    ⚡ Not: Listelenen puanlar tarayıcınızda izlenir
                   </span>
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 12, alignItems: 'flex-end', flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <label style={{ fontSize: 13, color: '#9ca3af', fontWeight: 500 }}>💸 Amount to Sell (points)</label>
+                  <label style={{ fontSize: 13, color: '#9ca3af', fontWeight: 500 }}>💸 Satılacak Miktar (puan)</label>
                   <input
                     type="number"
                     value={sellAmount}
@@ -2243,7 +2243,7 @@ function App() {
                   />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <label style={{ fontSize: 13, color: '#9ca3af', fontWeight: 500 }}>💵 Price (SUI tokens)</label>
+                  <label style={{ fontSize: 13, color: '#9ca3af', fontWeight: 500 }}>💵 Fiyat (SUI token)</label>
                   <input
                     type="number"
                     value={sellPrice}
@@ -2266,14 +2266,14 @@ function App() {
                   onClick={async () => {
                     if (!account) {
                       console.log('%c❌ Access Denied', 'color: #ef4444; font-weight: bold;', 'Wallet not connected');
-                      setError('❌ Please connect your wallet first!');
+                      setError('❌ Lütfen önce cüzdanınızı bağlayın!');
                       return;
                     }
                     const listAmount = parseInt(sellAmount);
                     const suiAmount = parseFloat(sellPrice);
                     
                     if (effectivePoints < listAmount) {
-                      setError(`❌ Insufficient points! Current: ${effectivePoints}, Amount to sell: ${listAmount}`);
+                      setError(`❌ Yeterli puanınız yok! Mevcut: ${effectivePoints}, Satmak istenen: ${listAmount}`);
                       console.log('%c❌ Insufficient Points', 'color: #ef4444; font-weight: bold;', `Have: ${effectivePoints}, Need: ${listAmount}`);
                       return;
                     }
@@ -2282,7 +2282,7 @@ function App() {
                       return;
                     }
                     if (isNaN(suiAmount) || suiAmount <= 0) {
-                      setError('❌ Enter a valid SUI price! (e.g.: 0.001)');
+                      setError('❌ Geçerli bir SUI fiyatı girin! (Örn: 0.001)');
                       return;
                     }
                     
@@ -2383,8 +2383,8 @@ function App() {
             <div style={{ background: '#111827', padding: 16, borderRadius: 12, border: '1px solid #1f2937' }}>
               <h3 style={{ fontSize: 16, marginBottom: 12 }}>🔐 Secure Trading</h3>
               <div style={{ fontSize: 13, opacity: 0.8, lineHeight: 1.6 }}>
-                <p>✅ Sell your points for <strong style={{ color: '#60a5fa' }}>SUI tokens</strong></p>
-                <p>✅ Buy points from other players</p>
+                <p>✅ Puanlarınızı <strong style={{ color: '#60a5fa' }}>SUI token</strong> karşılığında satın</p>
+                <p>✅ Diğer oyunculardan puan satın alın</p>
                 <p>✅ Smart contract escrow güvenliği</p>
                 <p>✅ %2.5 platform komisyonu</p>
                 <p>✅ Anlık blockchain settlement</p>
@@ -2392,7 +2392,7 @@ function App() {
             </div>
 
             <div style={{ fontSize: 13, opacity: 0.7, padding: 12, background: '#020617', borderRadius: 8 }}>
-              💡 <strong>How it works?</strong> You can sell your points for SUI tokens and buy points from other players with SUI. All transactions are secured by smart contracts on the Sui blockchain.
+              💡 <strong>Nasıl çalışır?</strong> Puanlarınızı SUI token karşılığında satabilir, diğer oyunculardan SUI ile puan satın alabilirsiniz. Tüm işlemler Sui blockchain'de smart contract ile güvence altında.
             </div>
 
             {/* Global Marketplace Listings */}
@@ -2505,7 +2505,7 @@ function App() {
 
         {!achievement && !effectiveOwner && (
           <p>
-            Connect your wallet and mint your own Achievement NFT to get started.
+            Başlamak için cüzdan bağla ve kendi Achievement NFT&apos;ni mint et.
           </p>
         )}
 
