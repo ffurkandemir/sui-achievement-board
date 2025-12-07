@@ -309,7 +309,6 @@ function App() {
 
   const {
     data: leaderboard,
-    isLoading: leaderboardLoading,
   } = useLeaderboard();
 
   // Kullanıcının leaderboard'daki puanlarını bul
