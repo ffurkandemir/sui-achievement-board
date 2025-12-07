@@ -24,16 +24,40 @@ const REFERRAL_SYSTEM_ID = '0x0db61ce1d51219b2b12e8e3c0732459a60c11d2a88bffe35d9
 
 const TASKS = [
   {
-    title: 'Profilini oluştur',
-    description: 'Cüzdanını bağla ve ilk Achievement NFT’ni mint et.',
+    title: '🎯 First Steps',
+    description: 'Connect wallet and mint your Achievement NFT',
   },
   {
-    title: 'İlk görevi tamamla',
-    description: 'Uygulama içinden bir görevi başarıyla tamamla.',
+    title: '🚀 Quick Learner',
+    description: 'Complete your first on-chain task',
   },
   {
-    title: 'Seri görevci',
-    description: 'Tüm görevleri bitir, puan topla ve level atla.',
+    title: '⚡ Speed Runner',
+    description: 'Finish all tasks and level up fast',
+  },
+  {
+    title: '💎 Point Collector',
+    description: 'Accumulate 50+ points to unlock rewards',
+  },
+  {
+    title: '🔥 Streak Master',
+    description: 'Maintain a 3-day login streak',
+  },
+  {
+    title: '🎨 NFT Enthusiast',
+    description: 'Explore NFT metadata and properties',
+  },
+  {
+    title: '🏛️ DAO Participant',
+    description: 'Vote on your first governance proposal',
+  },
+  {
+    title: '💰 Staker',
+    description: 'Stake points in the governance pool',
+  },
+  {
+    title: '🛒 Marketplace Explorer',
+    description: 'List or buy points on the marketplace',
   },
 ];
 
