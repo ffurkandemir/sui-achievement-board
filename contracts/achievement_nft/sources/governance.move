@@ -195,17 +195,20 @@ module achievement_nft::governance {
     }
 
     /// Vote on a proposal
+    /// Security: Voting power is derived from the user's actual NFT points
     public entry fun vote_on_proposal(
         governance: &mut GovernanceHub,
+        nft: &AchievementNFT,
         proposal_id: u64,
         in_favor: bool,
-        voting_power: u64, // Based on user's achievement points
         clock: &Clock,
         ctx: &mut TxContext
     ) {
         let voter = tx_context::sender(ctx);
         let now = clock::timestamp_ms(clock);
 
+        // Read voting power from NFT (prevents manipulation)
+        let voting_power = achievement::get_points(nft);
         assert!(voting_power >= MIN_VOTING_POWER, E_NOT_ENOUGH_POINTS);
 
         let proposal = vec_map::get_mut(&mut governance.proposals, &proposal_id);
@@ -257,14 +260,20 @@ module achievement_nft::governance {
 
     // ===== Staking Functions =====
 
-    /// Stake points for rewards (virtual staking - doesn't actually deduct points)
+    /// Stake points for rewards
+    /// Security: Validates user has sufficient points in their NFT
     public entry fun stake_points(
         pool: &mut StakingPool,
+        nft: &AchievementNFT,
         amount: u64,
         clock: &Clock,
         ctx: &mut TxContext
     ) {
         let staker = tx_context::sender(ctx);
+        
+        // Validate user has enough points to stake
+        let user_points = achievement::get_points(nft);
+        assert!(user_points >= amount, E_NOT_ENOUGH_POINTS);
         
         let now = clock::timestamp_ms(clock);
 
@@ -313,14 +322,20 @@ module achievement_nft::governance {
 
     // ===== Marketplace Functions =====
 
-    /// List points for sale (virtual - no points deduction until purchase)
+    /// List points for sale
+    /// Security: Validates seller has sufficient points in their NFT
     public entry fun list_points(
         marketplace: &mut Marketplace,
+        nft: &AchievementNFT,
         points_amount: u64,
         sui_price: u64,
         ctx: &mut TxContext
     ) {
         let seller = tx_context::sender(ctx);
+        
+        // Validate seller has enough points to list
+        let seller_points = achievement::get_points(nft);
+        assert!(seller_points >= points_amount, E_NOT_ENOUGH_POINTS);
         
         let listing_id = marketplace.next_listing_id;
 
@@ -345,12 +360,14 @@ module achievement_nft::governance {
     }
 
     /// Buy points from marketplace
-    public fun buy_points(
+    /// Transfers purchased points to buyer's NFT
+    public entry fun buy_points(
         marketplace: &mut Marketplace,
+        buyer_nft: &mut AchievementNFT,
         listing_id: u64,
         payment: Coin<SUI>,
-        _ctx: &mut TxContext
-    ): u64 {
+        ctx: &mut TxContext
+    ) {
         let listing = vec_map::get_mut(&mut marketplace.listings, &listing_id);
         assert!(listing.active, E_NOT_ENOUGH_POINTS);
 
@@ -366,7 +383,24 @@ module achievement_nft::governance {
         // Transfer to seller (simplified - in production, handle coin splits)
         transfer::public_transfer(payment, listing.seller);
 
-        listing.points_amount
+        // Transfer points to buyer's NFT
+        let purchased_points = listing.points_amount;
+        achievement::add_points(buyer_nft, purchased_points);
+        
+        event::emit(PointsPurchased {
+            buyer: tx_context::sender(ctx),
+            listing_id,
+            points_amount: purchased_points,
+            sui_paid: listing.sui_price,
+        });
+    }
+
+    /// Event for point purchase
+    public struct PointsPurchased has copy, drop {
+        buyer: address,
+        listing_id: u64,
+        points_amount: u64,
+        sui_paid: u64,
     }
 
     // ===== View Functions =====

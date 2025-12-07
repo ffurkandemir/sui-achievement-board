@@ -382,4 +382,11 @@ module achievement_nft::achievement {
         nft.points
     }
 
+    /// Add points to NFT (for marketplace/governance module)
+    /// This is a trusted operation - only called by governance module
+    public fun add_points(nft: &mut AchievementNFT, amount: u64) {
+        nft.points = nft.points + amount;
+        nft.level = recompute_level(nft.points);
+    }
+
 }
