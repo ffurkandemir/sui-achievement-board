@@ -56,3 +56,15 @@ lerna-debug.log*
 
 # Local state
 *.local
+
+# Temporary and backup files
+*.backup
+*.tmp
+*.log
+
+# Documentation (keep only README and deployment guide)
+DEPLOYMENT.md
+FEATURES.md
+
+# Frontend README (redundant)
+frontend/README.md
