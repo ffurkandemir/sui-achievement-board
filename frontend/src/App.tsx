@@ -8,19 +8,19 @@ import {
 } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
 
-// Fresh deployment - December 7, 2025
-const PACKAGE_ID = '0xef282ed351394edef5f3ccfa840ac1c212478ee032f5bcfd95a85a3cd43e9a1a';
+// Security Update Deployment - December 7, 2025
+const PACKAGE_ID = '0x977ac91148659cb3723c4d95a72e310bf1070bd3ca5a2a18d737335c2b39655c';
 
 const ACHIEVEMENT_TYPE = `${PACKAGE_ID}::achievement::AchievementNFT`;
 const CLOCK_OBJECT = '0x6'; // Sui's shared Clock object
 
 // Shared Objects from deployment
-const LEADERBOARD_ID = '0x0931f6d8bc3c95cc3fefdd0150067b1ac557aa426012f52136104690982beff1';
-const GOVERNANCE_HUB_ID = '0xab60eceadfdeae7328c40c6b8d5a304c4bea47cee21130251a02b49f793e0153';
-const STAKING_POOL_ID = '0x62347aa6f923854e22d09ac051eed91a1e716697f82ab523f29b2e2eeb2b153d';
-const MARKETPLACE_ID = '0x298d7cad6d7ffb70b56b20c32ea3c48f3b5056b49e438cbfaaf2402223d18c8c';
-const TASK_SYSTEM_ID = '0x034436fa831b276f36fd42f7784a21c338d77df8632c933057b13ebb7ed4597f';
-const REFERRAL_SYSTEM_ID = '0x0db61ce1d51219b2b12e8e3c0732459a60c11d2a88bffe35d91ee4e6e25dbdb3';
+const LEADERBOARD_ID = '0x8c7ad51bd565f5f4685b6abfeb3ac01f850733a598a50a7331a037b83de671d6';
+const GOVERNANCE_HUB_ID = '0xb4a8a440b3cd109614a9e3c7a5e1727dfe7feb38d3bb74318eca3379a1901557';
+const STAKING_POOL_ID = '0x7b6f6910ce9d128fea8bfd85748c520f019e57eb78ccb1a43734f335d1d14c43';
+const MARKETPLACE_ID = '0x356aaa3e6905bfe66aaee0535ec3c0cb60be5773f4956912eb2dd131a8e6dc94';
+const TASK_SYSTEM_ID = '0x01361e39e388952b56675ba276b947ca0af62bf24d73956375c249e80ad066a9';
+const REFERRAL_SYSTEM_ID = '0xe2adb0fd8e8821b6180bbb7885ed73f1645136850df9e06f86292cea32f46e86';
 
 const TASKS = [
   {
