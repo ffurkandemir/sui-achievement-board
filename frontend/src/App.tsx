@@ -8,19 +8,19 @@ import {
 } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
 
-// Replace these IDs after deploying the Move contract
-const PACKAGE_ID = 'YOUR_PACKAGE_ID_HERE';
+// Fresh deployment - December 7, 2025
+const PACKAGE_ID = '0xef282ed351394edef5f3ccfa840ac1c212478ee032f5bcfd95a85a3cd43e9a1a';
 
 const ACHIEVEMENT_TYPE = `${PACKAGE_ID}::achievement::AchievementNFT`;
 const CLOCK_OBJECT = '0x6'; // Sui's shared Clock object
 
-// Shared Objects - Replace after deployment
-const LEADERBOARD_ID = 'YOUR_LEADERBOARD_ID_HERE';
-const GOVERNANCE_HUB_ID = 'YOUR_GOVERNANCE_HUB_ID_HERE';
-const STAKING_POOL_ID = 'YOUR_STAKING_POOL_ID_HERE';
-const MARKETPLACE_ID = 'YOUR_MARKETPLACE_ID_HERE';
-const TASK_SYSTEM_ID = 'YOUR_TASK_SYSTEM_ID_HERE';
-const REFERRAL_SYSTEM_ID = 'YOUR_REFERRAL_SYSTEM_ID_HERE';
+// Shared Objects from deployment
+const LEADERBOARD_ID = '0x0931f6d8bc3c95cc3fefdd0150067b1ac557aa426012f52136104690982beff1';
+const GOVERNANCE_HUB_ID = '0xab60eceadfdeae7328c40c6b8d5a304c4bea47cee21130251a02b49f793e0153';
+const STAKING_POOL_ID = '0x62347aa6f923854e22d09ac051eed91a1e716697f82ab523f29b2e2eeb2b153d';
+const MARKETPLACE_ID = '0x298d7cad6d7ffb70b56b20c32ea3c48f3b5056b49e438cbfaaf2402223d18c8c';
+const TASK_SYSTEM_ID = '0x034436fa831b276f36fd42f7784a21c338d77df8632c933057b13ebb7ed4597f';
+const REFERRAL_SYSTEM_ID = '0x0db61ce1d51219b2b12e8e3c0732459a60c11d2a88bffe35d91ee4e6e25dbdb3';
 
 const TASKS = [
   {
