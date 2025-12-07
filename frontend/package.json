@@ -3,11 +3,11 @@
   "private": false,
   "version": "1.0.0",
   "description": "A gamified achievement tracking system with dynamic NFTs, DAO governance, and marketplace on Sui blockchain",
-  "author": "Your Name <your.email@example.com>",
+  "author": "Furkan Demir <ffurkandemir0@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/sui-achievement-board.git"
+    "url": "https://github.com/ffurkandemir/sui-achievement-board.git"
   },
   "keywords": [
     "sui",

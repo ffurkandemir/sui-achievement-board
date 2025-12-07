@@ -866,11 +866,11 @@ function App() {
         </span>
         {isOwner ? (
           <span style={{ marginLeft: 8, fontSize: 12, color: '#22c55e' }}>
-            (Bu sensin 🎉)
+            (This is you 🎉)
           </span>
         ) : (
           <span style={{ marginLeft: 8, fontSize: 12, color: '#38bdf8' }}>
-            (Read-only mod)
+            (Read-only mode)
           </span>
         )}
       </p>
@@ -1341,7 +1341,7 @@ function App() {
                     Today's Bonus
                   </div>
                   <div style={{ fontSize: 24, fontWeight: 700, color: '#f59e0b' }}>
-                    +{5 + achievement.daily_streak.current * 2} puan
+                    +{5 + achievement.daily_streak.current * 2} points
                   </div>
                 </div>
               </div>
@@ -1444,7 +1444,7 @@ function App() {
                   fontSize: 13,
                 }}
               >
-                İlerlemeyi Sıfırla 🔄
+                Reset Progress 🔄
               </button>
             )}
 
@@ -1475,8 +1475,7 @@ function App() {
             !eventsError &&
             (!events || events.length === 0) && (
               <p style={{ fontSize: 12, opacity: 0.8 }}>
-                Henüz görev aktivitesi yok. Task butonlarına tıkladığında
-                burada görünecek.
+                No task activity yet. Completed tasks will appear here.
               </p>
             )}
 
@@ -1503,13 +1502,13 @@ function App() {
                   <div>
                     {e.type === 'task' && (
                       <>
-                        🎯 Task {(e.taskIndex ?? 0) + 1} completed — {e.newPoints} puan
-                        {e.newLevel !== undefined && `, seviye ${e.newLevel}`}
+                        🎯 Task {(e.taskIndex ?? 0) + 1} completed — {e.newPoints} points
+                        {e.newLevel !== undefined && `, level ${e.newLevel}`}
                       </>
                     )}
                     {e.type === 'daily_reward' && (
                       <>
-                        🔥 Daily reward claimed — +{e.bonusPoints} puan (Streak: {e.streak} gün)
+                        🔥 Daily reward claimed — +{e.bonusPoints} points (Streak: {e.streak} days)
                       </>
                     )}
                   </div>
@@ -1969,7 +1968,7 @@ function App() {
                         <span>{proposal.executed ? '✅ Executed' : '⏳ Pending'}</span>
                       </div>
                       <div style={{ fontSize: 10, opacity: 0.6, marginTop: 4 }}>
-                        💡 Upvote/Downvote için minimum 10 puan gerekli (max 10 voting power)
+                        💡 Minimum 10 points required for upvote/downvote (max 10 voting power)
                       </div>
                       <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
                         <button
@@ -2212,10 +2211,10 @@ function App() {
                 </div>
                 <div style={{ opacity: 0.8, lineHeight: 1.6 }}>
                   🏪 Sell your points for <strong style={{ color: '#60a5fa' }}>SUI tokens</strong><br/>
-                  💵 Platform komisyonu: %2.5<br/>
-                  ⚡ Blockchain üzerinde anlık ödeme<br/>
-                  🔒 Smart contract escrow sistemi<br/>
-                  ⚠️ Minimum satış: 10 puan<br/>
+                  💵 Platform fee: 2.5%<br/>
+                  ⚡ Instant blockchain payments<br/>
+                  🔒 Smart contract escrow system<br/>
+                  ⚠️ Minimum sale: 10 points<br/>
                   <span style={{ fontSize: 11, color: '#fbbf24', marginTop: 4, display: 'block' }}>
                     ⚡ Note: Listed points are tracked in your browser
                   </span>
@@ -2278,7 +2277,7 @@ function App() {
                       return;
                     }
                     if (listAmount < 10) {
-                      setError('❌ Minimum satış miktarı 10 puandır!');
+                      setError('❌ Minimum sale amount is 10 points!');
                       return;
                     }
                     if (isNaN(suiAmount) || suiAmount <= 0) {
@@ -2385,9 +2384,9 @@ function App() {
               <div style={{ fontSize: 13, opacity: 0.8, lineHeight: 1.6 }}>
                 <p>✅ Sell your points for <strong style={{ color: '#60a5fa' }}>SUI tokens</strong></p>
                 <p>✅ Buy points from other players</p>
-                <p>✅ Smart contract escrow güvenliği</p>
-                <p>✅ %2.5 platform komisyonu</p>
-                <p>✅ Anlık blockchain settlement</p>
+                <p>✅ Smart contract escrow security</p>
+                <p>✅ 2.5% platform fee</p>
+                <p>✅ Instant blockchain settlement</p>
               </div>
             </div>
 
@@ -2469,10 +2468,10 @@ function App() {
                     }}>
                       <div style={{ fontSize: 13 }}>
                         <div style={{ marginBottom: 4 }}>
-                          💰 <strong>{listing.points_amount || 'N/A'} puan</strong>
+                          💰 <strong>{listing.points_amount || 'N/A'} points</strong>
                         </div>
                         <div style={{ opacity: 0.7, fontSize: 12 }}>
-                          💵 Fiyat: <strong style={{ color: '#60a5fa' }}>{(listing.sui_price / 1000000000).toFixed(6)} SUI</strong>
+                          💵 Price: <strong style={{ color: '#60a5fa' }}>{(listing.sui_price / 1000000000).toFixed(6)} SUI</strong>
                         </div>
                         <div style={{ opacity: 0.5, fontSize: 11, marginTop: 4 }}>
                           Seller: {listing.seller ? `${listing.seller.slice(0, 6)}...${listing.seller.slice(-4)}` : 'Unknown'}

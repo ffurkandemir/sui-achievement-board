@@ -34,14 +34,14 @@ Sui Achievement Board is a full-featured DApp demonstrating Sui blockchain's cap
 > ⚠️ **Important:** This project is built for **Sui Testnet**. All smart contracts are deployed on testnet and require testnet SUI tokens to interact. Perfect for testing and learning without real funds!
 
 **Deployed on Sui Testnet:**
-- Package: `0x01f39ae8802d5cef4118b67dfae61bc291dc71cc8d907bc9c3ff63d31e0f1dc7`
-- [View on Suiscan](https://suiscan.xyz/testnet/object/0x01f39ae8802d5cef4118b67dfae61bc291dc71cc8d907bc9c3ff63d31e0f1dc7)
+- Package ID available after deployment
+- [View on Suiscan Explorer](https://suiscan.xyz/testnet)
 
 ## 🚀 Live Demo
 
-🌐 **[Try it now on Testnet](https://sui-achievement-board.vercel.app)** _(Coming Soon)_
+🌐 **Deploy your own instance on Vercel or Netlify**
 
-**Test Credentials:**
+**Requirements:**
 - Network: Sui Testnet
 - Faucet: [Get Test SUI](https://faucet.sui.io/)
 - Recommended Wallet: [Sui Wallet](https://chromewebstore.google.com/detail/sui-wallet/opcgpfmipidbgpenhmajoajpbobppdil)
@@ -99,7 +99,7 @@ sui-achievement-board/
 │       └── governance.move       # DAO, Staking & Marketplace
 ├── frontend/
 │   ├── src/
-│   │   ├── App.tsx              # Main application (2600+ lines)
+│   │   ├── App.tsx              # Main application 
 │   │   ├── App.css              # Component styles
 │   │   ├── index.css            # Global styles
 │   │   └── main.tsx             # Entry point with Sui integration
@@ -139,15 +139,16 @@ sui-achievement-board/
 
 ## 🚀 Quick Start
 
-### Option 1: Use Live Demo (Easiest)
+### Setup Steps
 
-1. Visit the [Live Demo](https://sui-achievement-board.vercel.app)
-2. Install [Sui Wallet](https://chromewebstore.google.com/detail/sui-wallet/opcgpfmipidbgpenhmajoajpbobppdil)
-3. Switch to **Testnet** network
-4. Get test SUI from [faucet](https://faucet.sui.io/)
-5. Connect wallet and start achieving! 🎉
+1. Install [Sui Wallet](https://chromewebstore.google.com/detail/sui-wallet/opcgpfmipidbgpenhmajoajpbobppdil)
+2. Switch to **Testnet** network in your wallet
+3. Get test SUI from [faucet](https://faucet.sui.io/)
+4. Deploy smart contracts (see below)
+5. Run the frontend locally
+6. Connect wallet and start achieving! 🎉
 
-### Option 2: Run Locally
+### Local Development
 
 #### Prerequisites
 - [Sui CLI](https://docs.sui.io/build/install) (for contract development)
@@ -158,7 +159,7 @@ sui-achievement-board/
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/sui-achievement-board.git
+git clone https://github.com/ffurkandemir/sui-achievement-board.git
 cd sui-achievement-board
 
 # Install frontend dependencies
@@ -166,30 +167,36 @@ cd frontend
 npm install
 ```
 
+#### Deploy Smart Contracts
+
+```bash
+# Navigate to contracts directory
+cd contracts/achievement_nft
+
+# Publish to Sui Testnet
+sui client publish --gas-budget 500000000
+```
+
+**After deployment, update frontend with your contract IDs:**
+- Edit `frontend/src/App.tsx` (lines 11-23)
+- Replace placeholder IDs with your deployed contract IDs:
+  - `PACKAGE_ID` - Your published package ID
+  - `LEADERBOARD_ID` - Shared Leaderboard object ID
+  - `GOVERNANCE_HUB_ID` - Shared GovernanceHub object ID
+  - `STAKING_POOL_ID` - Shared StakingPool object ID
+  - `MARKETPLACE_ID` - Shared Marketplace object ID
+  - `TASK_SYSTEM_ID` - Shared TaskSystem object ID
+  - `REFERRAL_SYSTEM_ID` - Shared ReferralSystem object ID
+
 #### Run Development Server
 
 ```bash
-# Start the frontend (already configured with deployed contracts)
+# Start the frontend
+cd frontend
 npm run dev
 ```
 
 Visit `http://localhost:5173`
-
-#### Deploy Your Own Contracts (Optional)
-
-```bash
-cd contracts/achievement_nft
-
-# Publish to Sui Testnet
-sui client publish --gas-budget 100000000
-```
-
-**Update frontend with your IDs:**
-- Edit `frontend/src/App.tsx`
-- Line 11: `PACKAGE_ID`
-- Line 12: `GOVERNANCE_HUB_ID`
-- Line 13: `MARKETPLACE_ID`
-- Line 15: `LEADERBOARD_ID`
 
 ## 📖 How It Works
 
@@ -197,7 +204,7 @@ sui client publish --gas-budget 100000000
 
 #### 1️⃣ Mint Your Achievement NFT
 ```
-Connect Wallet → Click "Achievement NFT Mint Et" → Approve Transaction
+Connect Wallet → Click "Mint New NFT" → Approve Transaction
 ```
 - Your unique NFT is created on-chain
 - Automatically added to global leaderboard
@@ -214,7 +221,7 @@ Select Task → Click to Complete → Earn +10 Points
 
 #### 3️⃣ Claim Daily Rewards
 ```
-Click "Günlük Ödül Al" → Get Base + Streak Bonus
+Click "Claim Daily Reward" → Get Base + Streak Bonus
 ```
 - Base reward: 5 points
 - Streak bonus: +2 points per consecutive day
@@ -611,8 +618,8 @@ This is a hackathon project, but contributions are welcome!
 
 **Built for Sui Hackathon 2025**
 
-- GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
-- Twitter: [@YOUR_TWITTER](https://twitter.com/YOUR_TWITTER) _(Optional)_
+- GitHub: [@ffurkandemir](https://github.com/ffurkandemir)
+
 
 ## 🙏 Acknowledgments
 
@@ -626,7 +633,7 @@ This is a hackathon project, but contributions are welcome!
 
 **🚀 [Live Demo](https://sui-achievement-board.vercel.app)** | 
 **📦 [Package Explorer](https://suiscan.xyz/testnet/object/0x01f39ae8802d5cef4118b67dfae61bc291dc71cc8d907bc9c3ff63d31e0f1dc7)** | 
-**📖 [Documentation](https://github.com/YOUR_USERNAME/sui-achievement-board/wiki)**
+**📖 [Documentation](https://github.com/ffurkandemir/sui-achievement-board/wiki)**
 
 Built with ❤️ on Sui Blockchain
 
